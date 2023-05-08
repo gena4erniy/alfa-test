@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id "io.qameta.allure" version "2.9.6"
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+def allureVersion = "2.19.0",
+    junitVersion = "5.8.2",
+    slf4jVersion = "1.7.32",
+    selenideVersion = "5.25.0",
+    appiumVersion = "7.6.0",
+    assertjVersion = "3.22.0",
+    ownerVersion = "1.0.12"
+
+compileJava.options.encoding = 'UTF-8'
+javadoc.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'com.github.romankh3:image-comparison:4.4.0'
+    testImplementation(
+            "io.qameta.allure:allure-junit5:$allureVersion",
+            "com.codeborne:selenide:$selenideVersion",
+            "io.qameta.allure:allure-selenide:$allureVersion",
+            "io.appium:java-client:$appiumVersion",
+            "org.assertj:assertj-core:$assertjVersion",
+            "org.aeonbits.owner:owner:$ownerVersion",
+            "org.junit.jupiter:junit-jupiter-api:$junitVersion",
+            "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    )
+    testRuntimeOnly(
+            "org.slf4j:slf4j-simple:$slf4jVersion",
+            "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    )
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        lifecycle {
+            events "failed"
+            exceptionFormat "short"
+        }
+    }
+}
